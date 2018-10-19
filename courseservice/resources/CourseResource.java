@@ -50,7 +50,7 @@ public class CourseResource {
 	@DELETE
 	@Path("/{courseId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Course deleteStudent(@PathParam("courseId") long courseId) {
+	public Course deleteCourse(@PathParam("courseId") long courseId) {
 		return CourseService.courseDeleting(courseId);
 	}
 	
