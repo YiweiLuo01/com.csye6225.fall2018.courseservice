@@ -7,7 +7,7 @@ import java.util.List;
 import com.csye6225.fall2018.courseservice.datamodel.Course;
 
 
-public class CourseService {
+public class CourseService{
 	
 	static HashMap<Long, Course > courseMap = new HashMap<>();
 	
