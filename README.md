@@ -1,7 +1,7 @@
 # com.csye6225.fall2018.courseservice
 
 
-EB address: https://us-east-2.console.aws.amazon.com/elasticbeanstalk/home?region=us-east-2#/environment/dashboard?applicationName=com.csye6225.fall2018.courseservic&environmentId=e-tv4je3qa7n
+EB address:http://comcsye6225fall2018courseservic-env.5ppdmdmcva.us-east-2.elasticbeanstalk.com
 
 
 
