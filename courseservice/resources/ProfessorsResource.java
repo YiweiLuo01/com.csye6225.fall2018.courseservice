@@ -1,6 +1,5 @@
 package com.csye6225.fall2018.courseservice.resources;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -17,18 +16,17 @@ import javax.ws.rs.core.MediaType;
 import com.csye6225.fall2018.courseservice.datamodel.Professor;
 import com.csye6225.fall2018.courseservice.service.ProfessorsService;
 
-
 @Path("professors")
 public class ProfessorsResource {
 
 	ProfessorsService professorService = new ProfessorsService();
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Professor> getProfessors() {
 		return professorService.getAllProfessors();
 	}
-	
+
 //	@GET
 //	@Path("/{department}")
 //	@Produces(MediaType.APPLICATION_JSON)
@@ -40,39 +38,37 @@ public class ProfessorsResource {
 //		return professorService.getProfessorsByDepartment(department);
 //		
 //	}
-	
 
 	@GET
 	@Path("/{professorId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Professor getProfessorById(@PathParam("professorId") long profId) {
-		return professorService.getProfessorById(profId);
+	public Professor getProfessorById(@PathParam("professorId") String profId) {
+		return professorService.getProfessor(profId);
 	}
-	
+
 	@DELETE
 	@Path("/{professorId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Professor deleteProfessor(@PathParam("professorId") long profId) {
+	public Professor deleteProfessor(@PathParam("professorId") String profId) {
 		return professorService.professorDeleting(profId);
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Professor addProfessor(Professor prof) {
-			return professorService.addProfessor(prof);
+		return professorService.addProfessor(prof);
 	}
-	
+
 	@PUT
 	@Path("/{professorId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	
-	public Professor updateProfessor(@PathParam("professorId") long profId, 
-			Professor prof) {
+
+	public Professor updateProfessor(@PathParam("professorId") String profId, Professor prof) {
 		return professorService.professorUpdating(profId, prof);
 	}
-	
+
 //	public void addProfessor(String firstName,String lastName,  String department, Date joiningDate) {
 //		professorService.professorAdding(firstName, lastName, department, joiningDate);
 //	}

@@ -18,9 +18,9 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/courses")
 public class CourseResource {
-	
+
 	CourseService courseService = new CourseService();
-	
+
 //	@GET
 //	@Produces(MediaType.APPLICATION_JSON)
 //	public Course getCourseById(
@@ -32,44 +32,42 @@ public class CourseResource {
 //		return CourseService.getCourseById(courseId);
 //		
 //	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Course> getCourses() {
 		return courseService.getAllCourses();
 	}
-	
+
 	@GET
 	@Path("/{courseId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Course getCourse(@PathParam("courseId") long courseId) {
+	public Course getCourse(@PathParam("courseId") String courseId) {
 		return CourseService.getCourseById(courseId);
 	}
-	
-	
+
 	@DELETE
 	@Path("/{courseId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Course deleteCourse(@PathParam("courseId") long courseId) {
+	public Course deletCourse(@PathParam("courseId") String courseId) {
 		return CourseService.courseDeleting(courseId);
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Course courseAdding(Course newCourse) {
-		
+
 		CourseService.courseAdding(newCourse);
 		return newCourse;
 	}
-	
+
 	@PUT
 	@Path("/{courseId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	
-	public Course updateCourse(@PathParam("courseId") long courseId, 
-			Course course) {
+
+	public Course updateCourse(@PathParam("courseId") String courseId, Course course) {
 		return CourseService.courseUpdating(courseId, course);
 	}
 

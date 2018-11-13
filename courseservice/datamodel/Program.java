@@ -1,13 +1,15 @@
 package com.csye6225.fall2018.courseservice.datamodel;
 
+import java.util.List;
+
 public class Program {
-	
+
 	private String programName;
-	private int programID;
-	private String[] Courses;
-	
-	public Program() {
-		
+	private String programID;
+	private List<Course> programCourse;
+
+	public Program(String programName, List<Course> programCourse) {
+		this.programCourse = programCourse;
 	}
 
 	public String getProgramName() {
@@ -18,20 +20,25 @@ public class Program {
 		this.programName = programName;
 	}
 
-	public int getProgramID() {
+	public List<Course> getProgramCourses() {
+		return programCourse;
+	}
+
+	public void setProgramCourses(List<Course> programCourse) {
+		this.programCourse = programCourse;
+	}
+
+	public String getProgramID() {
 		return programID;
 	}
 
-	public void setProgramID(int programID) {
+	public void setProgramID(String programID) {
 		this.programID = programID;
 	}
+//
+//	public Object getProgramsByCourseId() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	public String[] getCourses() {
-		return Courses;
-	}
-
-	public void setCourses(String[] courses) {
-		Courses = courses;
-	}
-	
 }

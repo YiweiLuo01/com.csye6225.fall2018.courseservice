@@ -1,33 +1,33 @@
 package com.csye6225.fall2018.courseservice.datamodel;
 
 public class Course {
-	private long courseId;
-	private long lectureId;
+	private String courseId;
+	private String lectureId;
 	private String board;
 	private String roster;
-	private long studentId;
-	private long professorId;
-	private long StudentTA;
+	private String[] studentId;
+	private String professorId;
+	private String StudentTAId;
 	
 	
 	public Course() {
 		
 	}
-	public Course(long courseId, long lectureId, String board, String roster, long studentId, long professorId, long studentTA) {
+	public Course(String courseId, String lectureId, String board, String roster, String studentId, String professorId, String studentTAId) {
 		
 	}
-	public long getCourseId() {
+	public String getCourseId() {
 		return courseId;
 	}
 
-	public void setCourseId(long courseId) {
+	public void setCourseId(String courseId) {
 		this.courseId = courseId;
 	}
-	public long getLectureId() {
+	public String getLectureId() {
 		return lectureId;
 	}
 
-	public void setLectureId(long lectureId) {
+	public void setLectureId(String lectureId) {
 		this.lectureId = lectureId;
 	}
 
@@ -47,28 +47,28 @@ public class Course {
 		this.roster = roster;
 	}
 
-	public long getStudentId() {
+	public String[] getStudentId() {
 		return studentId;
 	}
 
-	public void setStudentId(long studentId) {
+	public void setStudentId(String[] studentId) {
 		this.studentId = studentId;
 	}
 
-	public long getProfessorId() {
+	public String getProfessorId() {
 		return professorId;
 	}
 
-	public void setProfessorId(long professorId) {
+	public void setProfessorId(String professorId) {
 		this.professorId = professorId;
 	}
 
-	public long getStudentTA() {
-		return StudentTA;
+	public String getStudentTAId() {
+		return StudentTAId;
 	}
 
-	public void setStudentTA(long studentTA) {
-		StudentTA = studentTA;
+	public void setStudentTAId(String StudentTAId) {
+		this.StudentTAId = StudentTAId;
 	}
 	
 
