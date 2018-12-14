@@ -13,6 +13,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import com.csye6225.fall2018.courseservice.datamodel.Course;
 import com.csye6225.fall2018.courseservice.datamodel.Student;
 import com.csye6225.fall2018.courseservice.service.StudentService;
 
@@ -42,6 +44,7 @@ public class StudentResource {
 	@Path("/{studentId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Student getStudentById(@PathParam("studentId") String studentId) {
+		System.out.println("studentId: " + studentId);
 		return StudentService.getStudentById(studentId);
 	}
 
@@ -60,6 +63,14 @@ public class StudentResource {
 		StudentService.studentAdding(newStudent);
 		return newStudent;
 	}
+	
+	@POST
+ 	@Path("/{studentId}/{courseId}")
+ 	@Produces(MediaType.APPLICATION_JSON)
+ 	@Consumes(MediaType.APPLICATION_JSON)
+ 	public Student registerCourse(@PathParam("studentId") String studentId, @PathParam("courseId") String courseId) {
+ 			return studentService.registerCourse(studentId, courseId);
+ 	}
 
 	@PUT
 	@Path("/{studentId}")
@@ -70,4 +81,6 @@ public class StudentResource {
 		return StudentService.studentUpdating(studentId, student);
 	}
 
+	
+	
 }

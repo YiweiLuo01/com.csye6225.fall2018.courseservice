@@ -43,14 +43,14 @@ public class CourseResource {
 	@Path("/{courseId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Course getCourse(@PathParam("courseId") String courseId) {
-		return CourseService.getCourseById(courseId);
+		return courseService.getCourseById(courseId);
 	}
 
 	@DELETE
 	@Path("/{courseId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Course deletCourse(@PathParam("courseId") String courseId) {
-		return CourseService.courseDeleting(courseId);
+		return courseService.courseDeleting(courseId);
 	}
 
 	@POST
@@ -59,7 +59,7 @@ public class CourseResource {
 	public Course courseAdding(Course newCourse) {
 
 		
-		return  CourseService.courseAdding(newCourse);
+		return courseService.courseAdding(newCourse);
 	}
 
 	@PUT
@@ -68,7 +68,7 @@ public class CourseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 
 	public Course updateCourse(@PathParam("courseId") String courseId, Course course) {
-		return CourseService.courseUpdating(courseId, course);
+		return courseService.courseUpdating(courseId, course);
 	}
 
 }

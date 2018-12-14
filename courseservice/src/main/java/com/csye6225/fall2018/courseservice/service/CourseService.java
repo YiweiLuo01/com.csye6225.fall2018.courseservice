@@ -1,20 +1,23 @@
 package com.csye6225.fall2018.courseservice.service;
 
 import java.util.HashMap;
+
 import java.util.List;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.csye6225.fall2018.courseservice.EmailAnnouncement;
+import com.csye6225.fall2018.courseservice.datamodel.Board;
 import com.csye6225.fall2018.courseservice.datamodel.Course;
 import com.csye6225.fall2018.courseservice.datamodel.DynamoDbConnector;
 
 public class CourseService {
 
-	static HashMap<Long, Course> courseMap = new HashMap<>();
-	static DynamoDbConnector dynamoDb;
-	static DynamoDBMapper mapper;
+	HashMap<Long, Course> courseMap = new HashMap<>();
+	DynamoDbConnector dynamoDb;
+	DynamoDBMapper mapper;
 
 	public CourseService() {
 		dynamoDb = new DynamoDbConnector();
@@ -31,35 +34,48 @@ public class CourseService {
 		return list;
 	}
 
-	public static Course courseAdding(Course course) {
+	public Course courseAdding(Course course) {
 		Course newCourse = new Course();
+		String topicArn = EmailAnnouncement.createTopic("course" + course.getCourseId());
 		newCourse.setCourseId(course.getCourseId());
 		newCourse.setBoardId(course.getBoardId());
-		//newCourse.setStudentId(course.getStudentId());
-		//newCourse.setProfessorId(course.getProfessorId());
-		//newCourse.setStudentTAId(course.getStudentTAId());
+		newCourse.setStudentIds(course.getStudentIds());
+		newCourse.setProfessorId(course.getProfessorId());
+		newCourse.setStudentTAId(course.getStudentTAId());
 		newCourse.setLectureId(course.getLectureId());
-		mapper.save(newCourse);
+		newCourse.setSNSTopicArn(topicArn);
 
-		System.out.println("course added");
+		mapper.save(newCourse);
+		
+		if(!newCourse.getBoardId().equals("")) {
+			Board board = new Board(newCourse.getBoardId(), newCourse.getCourseId());
+			BoardService boardService = new BoardService();
+			boardService.addBoard(board);
+			System.out.println("board added");
+
+			
+			
+		}
 		System.out.println(newCourse.toString());
 
 		return newCourse;
+		
 	}
 
-	public static Course getCourseById(String courseId) {
-		HashMap<String, AttributeValue> map = new HashMap<String, AttributeValue>();
-		map.put(":v1", new AttributeValue().withS(courseId));
-
-		DynamoDBQueryExpression<Course> queryExpression = new DynamoDBQueryExpression<Course>()
-				.withIndexName("courseId-index").withConsistentRead(false).withKeyConditionExpression("courseId = :v1")
-				.withExpressionAttributeValues(map);
-
-		List<Course> list = mapper.query(Course.class, queryExpression);
-		return list.size() != 0 ? list.get(0) : null;
+	public Course getCourseById(String courseId) {
+//		HashMap<String, AttributeValue> map = new HashMap<String, AttributeValue>();
+//		map.put(":v1", new AttributeValue().withS(courseId));
+//
+//		DynamoDBQueryExpression<Course> queryExpression = new DynamoDBQueryExpression<Course>()
+//				.withIndexName("courseId-index").withConsistentRead(false).withKeyConditionExpression("courseId = :v1")
+//				.withExpressionAttributeValues(map);
+//
+//		List<Course> list = mapper.query(Course.class, queryExpression);
+//		return list.size() != 0 ? list.get(0) : null;
+		return mapper.load(Course.class, courseId);
 	}
 
-	public static Course courseDeleting(String courseId) {
+	public Course courseDeleting(String courseId) {
 
 		HashMap<String, AttributeValue> map = new HashMap<String, AttributeValue>();
 		map.put(":v1", new AttributeValue().withS(courseId));
@@ -84,7 +100,7 @@ public class CourseService {
 		return courseToDelete;
 	}
 
-	public static Course courseUpdating(String courseId, Course newCourse) {
+	public Course courseUpdating(String courseId, Course newCourse) {
 		HashMap<String, AttributeValue> map = new HashMap<String, AttributeValue>();
 		map.put(":v1", new AttributeValue().withS(courseId));
 
@@ -100,10 +116,13 @@ public class CourseService {
 
 			oldCourse = list.get(0);
 			oldCourse.setBoardId(newCourse.getBoardId());
-			//oldCourse.setStudentId(newCourse.getStudentId());
+			oldCourse.setStudentIds(newCourse.getStudentIds());
 			oldCourse.setProfessorId(newCourse.getProfessorId());
 			oldCourse.setStudentTAId(newCourse.getStudentTAId());
 			oldCourse.setLectureId(newCourse.getLectureId());
+			oldCourse.setSNSTopicArn(newCourse.getSNSTopicArn());
+			// oldCourse.setRoster(newCourse.getRoster());
+			oldCourse.setCourseId(newCourse.getCourseId());
 
 			mapper.save(oldCourse);
 			System.out.println("Course updated.");
@@ -112,6 +131,20 @@ public class CourseService {
 
 		return oldCourse;
 
+	}
+
+	// helper function
+	public List<Course> getCourseFromDDB(String courseId) {
+
+		HashMap<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+		eav.put(":v1", new AttributeValue().withS(courseId));
+
+		DynamoDBQueryExpression<Course> queryExpression = new DynamoDBQueryExpression<Course>()
+				.withIndexName("courseId-index").withConsistentRead(false).withKeyConditionExpression("courseId = :v1")
+				.withExpressionAttributeValues(eav);
+
+		List<Course> list = mapper.query(Course.class, queryExpression);
+		return list;
 	}
 
 }

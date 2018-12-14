@@ -8,14 +8,18 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.csye6225.fall2018.courseservice.EmailAnnouncement;
+import com.csye6225.fall2018.courseservice.datamodel.Course;
 import com.csye6225.fall2018.courseservice.datamodel.DynamoDbConnector;
 import com.csye6225.fall2018.courseservice.datamodel.InMemoryDatabase;
 import com.csye6225.fall2018.courseservice.datamodel.Student;
+import com.csye6225.fall2018.courseservice.service.CourseService;
 
 public class StudentService {
 	static HashMap<String, Student> studentMap = InMemoryDatabase.getStudentDB();
 	static DynamoDbConnector dynamoDb;
 	static DynamoDBMapper mapper; // static DynamoDbConnector dynamoDb;
+	CourseService courseService = new CourseService();
 
 	public StudentService() {
 		dynamoDb = new DynamoDbConnector();
@@ -41,6 +45,7 @@ public class StudentService {
 		newStudent.setCourseName(newStudent.getCourseName());
 		newStudent.setProgramName(newStudent.getProgramName());
 		newStudent.setStudentId(newStudent.getLastName().charAt(0) + "." + newStudent.getFirstName());
+		newStudent.setEmailId(newStudent.getEmailId());
 		mapper.save(newStudent);
 
 		System.out.println("Student added:");
@@ -50,10 +55,9 @@ public class StudentService {
 	}
 
 	public static Student getStudentById(String studentId) {
-		return studentMap.get(studentId);
+		return mapper.load(Student.class, studentId);
 	}
 
-	// Getting One Professor
 	public Student getStudent(String studentId) {
 		List<Student> list = getStudentFromDDB(studentId);
 		return list.size() != 0 ? list.get(0) : null;
@@ -106,6 +110,8 @@ public class StudentService {
 			oldStudent.setLastName(newStudent.getLastName());
 			oldStudent.setCourseName(newStudent.getCourseName());
 //			oldProf.setJoiningDate(prof.getJoiningDate());
+			oldStudent.setEmailId(newStudent.getEmailId());
+			oldStudent.setCourseIds(newStudent.getCourseIds());
 			mapper.save(oldStudent);
 			System.out.println("student updated:");
 			System.out.println(oldStudent.toString());
@@ -116,7 +122,7 @@ public class StudentService {
 
 	public static List<Student> getStudentsByCourse(String courseId) {
 		ArrayList<Student> list = new ArrayList<>();
-		for (Student student : studentMap.values()) {
+		for (Student student : getAllStudents()) {
 			if (student.getCourseName().equals(courseId)) {
 				list.add(student);
 			}
@@ -135,4 +141,33 @@ public class StudentService {
 		List<Student> list = mapper.query(Student.class, queryExpression);
 		return list;
 	}
+
+	// register for a course
+	public Student registerCourse(String studentId, String courseId) {
+//			List<Student> list = getStudentFromDDB(studentId);
+		Student stu = getStudentById(studentId);
+//		CourseService courseSer = new CourseService();
+//			Student stu = null;
+//			if(list.size() != 0) {
+//				stu = list.get(0);
+		System.out.println("courseID: " + courseId);
+		Course course = courseService.getCourseById(courseId);
+		System.out.println("CourseARN: " + course.getSNSTopicArn());
+		System.out.println("CourseID: " + course.getCourseId());
+		if (stu.getCourseIds().size() < 3) {
+			stu.getCourseIds().add(course.getCourseId());
+			System.out.println("course's studentIds: " + course.getStudentIds());
+			course.getStudentIds().add(studentId);
+
+			// update information in database
+			studentUpdating(studentId, stu);
+			courseService.courseUpdating(course.getCourseId(), course);
+			System.out.println("CourseARN: " + course.getSNSTopicArn());
+			System.out.println("CourseID: " + course.getCourseId());
+			System.out.println("student email: " + stu.getEmailId());
+			EmailAnnouncement.subscribe(course.getSNSTopicArn(), stu.getEmailId());
+		}
+		return stu;
+	}
+
 }

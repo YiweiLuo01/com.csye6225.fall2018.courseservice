@@ -43,6 +43,7 @@ public class AnnounceService {
 		newAnnouce.setBoardId(announcement.getBoardId());
 		newAnnouce.setAnnounceId(announcement.getAnnounceId());
 		newAnnouce.setAnnounceContent(announcement.getAnnounceContent());
+		newAnnouce.setCourseId(announcement.getCourseId());
 		mapper.save(newAnnouce);
 
 		return newAnnouce;
