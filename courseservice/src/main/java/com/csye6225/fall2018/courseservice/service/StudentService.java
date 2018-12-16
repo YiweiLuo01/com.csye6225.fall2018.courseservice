@@ -44,7 +44,10 @@ public class StudentService {
 		newStudent.setLastName(newStudent.getLastName());
 		newStudent.setCourseName(newStudent.getCourseName());
 		newStudent.setProgramName(newStudent.getProgramName());
-		newStudent.setStudentId(newStudent.getLastName().charAt(0) + "." + newStudent.getFirstName());
+		System.out.println(newStudent.getFirstName());
+		System.out.println(newStudent.getLastName());
+		
+		newStudent.setStudentId(newStudent.getLastName() + "." + newStudent.getFirstName());
 		newStudent.setEmailId(newStudent.getEmailId());
 		mapper.save(newStudent);
 
@@ -63,16 +66,7 @@ public class StudentService {
 		return list.size() != 0 ? list.get(0) : null;
 	}
 
-//	public static Student studentDeleting(String studentId) {
-//		Student deletStudent  = studentMap.get(studentId);
-//		if(deletStudent != null){
-//			studentMap.remove(studentId);
-//			return deletStudent;
-//		}else {
-//			System.out.println("cannot delete NullStudent");
-//			return deletStudent;
-//		}
-//	}
+
 	public static Student studentDeleting(String studentId) {
 		List<Student> list = getStudentFromDDB(studentId);
 		Student student = null;
@@ -91,16 +85,6 @@ public class StudentService {
 	}
 
 	public static Student studentUpdating(String studentId, Student newStudent) {
-//		Student oldStudent = studentMap.get(studentId);
-//		
-//		if(oldStudent != null && newStudent != null) {
-//			String oldId = oldStudent.getStudentId();
-//			newStudent.setStudentId(oldId);
-//			studentMap.put(oldId, newStudent);
-//			return newStudent;
-//		}else {
-//			return oldStudent;
-//		}
 
 		List<Student> list = getStudentFromDDB(studentId);
 		Student oldStudent = null;
@@ -109,7 +93,6 @@ public class StudentService {
 			oldStudent.setFirstName(newStudent.getFirstName());
 			oldStudent.setLastName(newStudent.getLastName());
 			oldStudent.setCourseName(newStudent.getCourseName());
-//			oldProf.setJoiningDate(prof.getJoiningDate());
 			oldStudent.setEmailId(newStudent.getEmailId());
 			oldStudent.setCourseIds(newStudent.getCourseIds());
 			mapper.save(oldStudent);
@@ -144,12 +127,7 @@ public class StudentService {
 
 	// register for a course
 	public Student registerCourse(String studentId, String courseId) {
-//			List<Student> list = getStudentFromDDB(studentId);
 		Student stu = getStudentById(studentId);
-//		CourseService courseSer = new CourseService();
-//			Student stu = null;
-//			if(list.size() != 0) {
-//				stu = list.get(0);
 		System.out.println("courseID: " + courseId);
 		Course course = courseService.getCourseById(courseId);
 		System.out.println("CourseARN: " + course.getSNSTopicArn());
@@ -159,7 +137,6 @@ public class StudentService {
 			System.out.println("course's studentIds: " + course.getStudentIds());
 			course.getStudentIds().add(studentId);
 
-			// update information in database
 			studentUpdating(studentId, stu);
 			courseService.courseUpdating(course.getCourseId(), course);
 			System.out.println("CourseARN: " + course.getSNSTopicArn());

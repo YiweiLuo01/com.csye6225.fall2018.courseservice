@@ -16,7 +16,6 @@ public class Student {
 	private String LastName;
 	private String id;
 	private String StudentId;
-	// private Long image;
 	private List<String> courseIds;
 	private String courseName;
 	private String programName;
