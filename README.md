@@ -3,7 +3,15 @@
 
 EB address:http://comcsye6225fall2018courseservic-env.5ppdmdmcva.us-east-2.elasticbeanstalk.com
 
-Test: http://comcsye6225fall2018courseservic-env.5ppdmdmcva.us-east-2.elasticbeanstalk.com/webapi/students/1
+Test: 
+Student:
+http://comcsye6225fall2018courseservic-env.5ppdmdmcva.us-east-2.elasticbeanstalk.com/webapi/students/1
+
+Courses:
+	http://comcsye6225fall2018courseservic-env.5ppdmdmcva.us-east-2.elasticbeanstalk.com/webapi/courses
+	
+Professors:
+	http://comcsye6225fall2018courseservic-env.5ppdmdmcva.us-east-2.elasticbeanstalk.com/webapi/professors
 
 
 
