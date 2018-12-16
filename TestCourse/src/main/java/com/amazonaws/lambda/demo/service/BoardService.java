@@ -16,12 +16,12 @@ public class BoardService {
 	}
 	
 	public Board addBoard(Board board) {
-		 Board board2 = new Board();
-		 board2.setBoardId(board.getBoardId());
-		 board2.setCourseId(board.getCourseId());
-		 mapper.save(board2);
+		 Board newBoard = new Board();
+		 newBoard.setBoardId(board.getBoardId());
+		 newBoard.setCourseId(board.getCourseId());
+		 mapper.save(newBoard);
 			
 			    
-		 return board2;
+		 return newBoard;
 	}
 }
